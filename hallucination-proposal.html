@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Room That Remembers — a browser game proposal about memory, perception, and hallucination.">
+<title>The Room That Remembers | Game Proposal</title>
+<style>
+:root{
+  --ink:#242238;--muted:#706c83;--paper:#f7f4fb;--white:#fff;
+  --lav:#dcd3f2;--violet:#7562a8;--rose:#d99da9;--gold:#d9b875;
+  --line:#e7e1ef;--dark:#211e34;--shadow:0 18px 50px rgba(39,29,67,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
+a{color:var(--violet);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:#493c73}
+.wrap{width:min(1120px,calc(100% - 40px));margin:auto}
+nav{position:sticky;top:0;z-index:10;background:rgba(247,244,251,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.navinner{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 0}
+.brand{font-weight:800;letter-spacing:.04em;font-size:.86rem}
+.navlinks{display:flex;gap:17px;flex-wrap:wrap;font-size:.78rem}
+.navlinks a{text-decoration:none;color:var(--muted)}
+.hero{padding:74px 0 64px;background:radial-gradient(circle at 78% 20%,rgba(217,157,169,.26),transparent 28%),radial-gradient(circle at 20% 70%,rgba(117,98,168,.18),transparent 30%),linear-gradient(135deg,#f8f5fc,#eee8f7)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;font-weight:800;color:var(--violet)}
+h1{font-family:Georgia,serif;font-size:clamp(3rem,8vw,6.5rem);line-height:.98;letter-spacing:-.055em;margin:18px 0;max-width:850px;font-weight:500}
+.subtitle{font-size:clamp(1rem,2vw,1.25rem);color:var(--muted);max-width:650px}
+.heroart{margin:48px auto 0;max-width:900px;min-height:300px;border-radius:28px;overflow:hidden;position:relative;background:linear-gradient(145deg,#29243f,#55466f 55%,#b18c9f);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}
+.room{position:absolute;inset:12% 16% 0;border:2px solid rgba(255,255,255,.48);border-bottom:0;clip-path:polygon(50% 0,100% 22%,100% 100%,0 100%,0 22%);background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(20,17,39,.22))}
+.door{position:absolute;bottom:0;left:43%;width:17%;height:58%;border:2px solid rgba(255,255,255,.7);border-bottom:0;background:linear-gradient(90deg,rgba(16,13,32,.6),rgba(255,225,202,.5));box-shadow:0 0 45px rgba(255,225,202,.35)}
+.orb{position:absolute;border-radius:50%;background:rgba(255,255,255,.78);box-shadow:0 0 28px rgba(255,255,255,.55)}
+.o1{width:14px;height:14px;top:24%;left:27%}.o2{width:9px;height:9px;top:35%;right:26%}.o3{width:18px;height:18px;bottom:25%;right:18%}
+.artlabel{position:absolute;bottom:20px;left:24px;color:#fff;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+.herofoot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:.82rem}
+main{padding:30px 0 90px}
+section{padding:54px 0;border-bottom:1px solid var(--line);scroll-margin-top:80px}
+.sectionhead{display:grid;grid-template-columns:70px 1fr;gap:20px;align-items:start;margin-bottom:28px}
+.num{font-family:Georgia,serif;font-size:2.2rem;color:var(--rose);line-height:1}
+h2{font-family:Georgia,serif;font-size:clamp(2rem,4vw,3.2rem);line-height:1.05;font-weight:500;letter-spacing:-.035em;margin:0 0 10px}
+h3{font-size:1.05rem;margin:0 0 8px}
+.lead{font-size:1.1rem;color:var(--muted);max-width:780px;margin:0}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:23px;box-shadow:0 8px 26px rgba(39,29,67,.045)}
+.span6{grid-column:span 6}.span4{grid-column:span 4}.span8{grid-column:span 8}.span12{grid-column:span 12}
+.kicker{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:var(--violet);font-weight:800;margin-bottom:8px}
+.muted{color:var(--muted)}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:5px 10px;font-size:.74rem;color:var(--muted);margin:3px 4px 3px 0}
+.note{background:#f0ebf8;border-left:4px solid var(--violet);padding:16px 18px;border-radius:0 12px 12px 0;color:#51496a}
+.warning{background:#fff6e9;border-left:4px solid var(--gold);padding:16px 18px;border-radius:0 12px 12px 0;color:#69532d}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;vertical-align:top;padding:13px 12px;border-bottom:1px solid var(--line)}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+td:first-child{font-weight:750;width:8%}
+.flow{display:flex;align-items:stretch;gap:9px;flex-wrap:wrap;margin:18px 0}
+.flow div{flex:1;min-width:125px;background:var(--dark);color:#fff;padding:16px;border-radius:13px;text-align:center}
+.flow b{display:block;color:#e8c8d0;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+.flow span{font-size:.88rem}
+.story{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.frame{background:#29243f;border-radius:15px;min-height:180px;padding:15px;color:#fff;position:relative;overflow:hidden}
+.frame:before{content:"";position:absolute;width:100px;height:100px;border:1px solid rgba(255,255,255,.4);border-radius:50%;right:-25px;top:-20px}
+.frame .frameNo{font-size:.68rem;letter-spacing:.15em;color:#e8c8d0}
+.frame h3{font-family:Georgia,serif;font-size:1.35rem;font-weight:500;margin-top:40px}
+.frame p{font-size:.8rem;color:#e0dbea}
+.palette{display:flex;gap:9px;margin:14px 0}
+.swatch{height:65px;flex:1;border-radius:10px;display:flex;align-items:end;padding:7px;color:#fff;font-size:.67rem}
+.ref{display:flex;gap:15px;align-items:flex-start}
+.refmark{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,var(--lav),var(--rose));flex:none}
+footer{background:var(--dark);color:#fff;padding:42px 0}
+footer p{color:#c8c2d7;max-width:700px}
+.small{font-size:.8rem}
+.todo{border:1px dashed #c8b9dc;background:#fbf9fe;padding:14px 16px;border-radius:12px;margin:12px 0}
+.todo strong{color:#624f8e}
+@media(max-width:760px){
+ .navinner{align-items:flex-start;flex-direction:column}.navlinks{gap:10px}
+ .sectionhead{grid-template-columns:42px 1fr;gap:12px}
+ .span6,.span4,.span8{grid-column:span 12}
+ .story{grid-template-columns:repeat(2,1fr)}
+ .hero{padding-top:50px}.heroart{min-height:230px}
+ table{font-size:.8rem}th,td{padding:9px 7px}
+}
+@media(max-width:430px){.story{grid-template-columns:1fr}.wrap{width:min(100% - 28px,1120px)}}
+</style>
+</head>
+<body>
+<nav><div class="wrap navinner">
+  <div class="brand">LANA HARKIN <span style="color:#b18c9f">✦</span> GAME DESIGN / 2026</div>
+  <div class="navlinks">
+    <a href="#concept">Concept</a><a href="#case-study">Case study</a><a href="#ai">AI discussion</a>
+    <a href="#narrative">Narrative</a><a href="#journey">Journey</a><a href="#style">Style + sound</a><a href="#plan">Build plan</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+<div class="wrap">
+  <div class="eyebrow">Three-week web game project · Week 01 / Research & pitch</div>
+  <h1>The Room<br>That Remembers</h1>
+  <p class="subtitle">A psychological point-and-click experience about memory, perception, and the unsettling space between what we see and what we believe.</p>
+  <div class="heroart" role="img" aria-label="Abstract surreal room with a glowing doorway and floating lights">
+    <div class="room"></div><div class="door"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+    <div class="artlabel">A memory is not always a reliable place.</div>
+  </div>
+  <div class="herofoot"><span>GAME PROPOSAL / INTERACTIVE DESIGN</span><span>Prepared by Lana Harkin · October 2026</span></div>
+</div>
+</header>
+
+<main class="wrap">
+<section id="concept">
+  <div class="sectionhead"><div class="num">01</div><div><div class="eyebrow">The proposal</div><h2>A room built from uncertain memories.</h2><p class="lead">The Room That Remembers is a short browser puzzle game in which the player explores a familiar-looking room that gradually becomes impossible to trust.</p></div></div>
+  <div class="grid">
+    <article class="card span6"><div class="kicker">The player experience</div><h3>Look closer. Question what changed.</h3>
+      <p>The player arrives in a quiet bedroom containing a small collection of ordinary objects: a mirror, a photograph, a clock, a chair, and a closed door. At first, the room feels recognizable. As the player inspects objects, details begin to contradict one another. A photograph changes, the clock moves in the wrong direction, and the reflection does not always match the room.</p>
+      <p>The player is not asked to defeat an enemy. Instead, they investigate the room, compare clues, and decide which version of the memory they believe.</p>
+    </article>
+    <article class="card span6"><div class="kicker">Design at a glance</div>
+      <p><strong>Genre:</strong> Surreal point-and-click puzzle</p><p><strong>Platform:</strong> Desktop web browser</p><p><strong>Primary input:</strong> Mouse click / tap to inspect objects</p><p><strong>Audience:</strong> Players who enjoy short atmospheric stories and environmental puzzles</p><p><strong>Estimated play time:</strong> 3–5 minutes</p>
+      <div><span class="pill">Memory</span><span class="pill">Perception</span><span class="pill">Uncertainty</span><span class="pill">Surrealism</span></div>
+    </article>
+  </div>
+  <div class="note" style="margin-top:18px"><strong>Core design goal:</strong> Make the player question the reliability of what they see through one simple interaction—clicking and examining objects—rather than relying on complicated controls or a long explanation.</div>
+</section>
+
+<section id="case-study">
+  <div class="sectionhead"><div class="num">02</div><div><div class="eyebrow">Research / case study</div><h2>Learning from another browser game.</h2><p class="lead"><em>We Become What We Behold</em> by Nicky Case is the case study for this proposal. Its simple camera interaction makes the player an active part of how a story is framed and understood.</p></div></div>
+  <div class="grid">
+    <article class="card span4"><div class="kicker">Game studied</div><h3>We Become What We Behold</h3><p>Creator: Nicky Case</p><p>Year: 2016</p><p>Format: Short browser game</p><p>Interaction: Move the camera and click to photograph moments.</p><p><a href="https://ncase.itch.io/wbwwb" target="_blank" rel="noopener">Play the game / creator page ↗</a></p></article>
+    <article class="card span8"><div class="kicker">Why this reference?</div><p>I selected this game because it uses a very small set of actions to communicate a larger idea about media, attention, and social behavior. The player does not directly control the characters. Instead, the player chooses what to frame and share. That creates an interesting relationship between player agency and the consequences shown in the game.</p><p><strong>Design principle I want to study:</strong> A player's attention can become part of the narrative. In my game, the objects the player chooses to inspect will reveal different pieces of a fragmented memory.</p></article>
+  </div>
+  <h3 style="margin:26px 0 10px">Three meaningful moments to document from my playthrough</h3>
+  <div class="warning"><strong>Complete after playing:</strong> These are observation prompts, not claims that I personally witnessed these events. Replace the bracketed text with your own notes and add your screenshots if possible.</div>
+  <div class="grid" style="margin-top:14px">
+    <article class="card span4"><div class="kicker">Moment 01 / First impression</div><h3>The initial scene</h3><p><strong>What I saw:</strong> [Describe the opening scene and the characters' behavior.]</p><p><strong>What I did:</strong> [Describe the first photograph you took.]</p><p><strong>Why it matters:</strong> [Explain how the opening establishes the game's rules or mood.]</p></article>
+    <article class="card span4"><div class="kicker">Moment 02 / A shift</div><h3>The effect of framing</h3><p><strong>What I saw:</strong> [Describe a photograph, headline, or character reaction that stood out.]</p><p><strong>What I did:</strong> [Describe what you chose to photograph.]</p><p><strong>Why it matters:</strong> [Explain how the selected image changed your understanding.]</p></article>
+    <article class="card span4"><div class="kicker">Moment 03 / Escalation</div><h3>The changing atmosphere</h3><p><strong>What I saw:</strong> [Describe a later moment when the atmosphere or behavior changed.]</p><p><strong>What I did:</strong> [Describe the action immediately before it.]</p><p><strong>Why it matters:</strong> [Explain how the game built tension or communicated consequences.]</p></article>
+  </div>
+  <h3 style="margin:28px 0 10px">Player-action event log</h3>
+  <p class="muted">Record at least five real actions. For each one, separate what you did, what the game showed, and what you understood.</p>
+  <div class="card" style="overflow-x:auto">
+    <table><thead><tr><th>#</th><th>Player action</th><th>Game response / evidence</th><th>Player understanding</th></tr></thead><tbody>
+      <tr><td>1</td><td>[What did you aim at or click first?]</td><td>[What appeared on screen or television?]</td><td>[What did you learn about the interaction?]</td></tr>
+      <tr><td>2</td><td>[What did you photograph next?]</td><td>[Record the exact headline or visible change.]</td><td>[How did it affect your interpretation?]</td></tr>
+      <tr><td>3</td><td>[Describe another photograph.]</td><td>[Record the character response.]</td><td>[What did you infer?]</td></tr>
+      <tr><td>4</td><td>[Describe a later photograph.]</td><td>[Record the change in the scene.]</td><td>[What pattern did you notice?]</td></tr>
+      <tr><td>5</td><td>[Describe a final or important action.]</td><td>[Record what happened afterward.]</td><td>[What did you understand by this point?]</td></tr>
+    </tbody></table>
+  </div>
+  <div class="note" style="margin-top:16px"><strong>Case-study conclusion — draft:</strong> The game demonstrates how a simple interaction can carry a complex message. The camera is not only a control; it represents the player's choices about what deserves attention. I want to apply this lesson by making object inspection in my game reveal information while also changing the player's understanding of the room.</div>
+  <p class="small muted">Credits and starting source: <a href="https://ncase.itch.io/wbwwb" target="_blank" rel="noopener">Nicky Case, We Become What We Behold</a>. Add any additional creator interviews or development notes you verify during research.</p>
+</section>
+
+<section id="ai">
+  <div class="sectionhead"><div class="num">03</div><div><div class="eyebrow">Critical AI discussion</div><h2>Using AI as a thinking partner—not an authority.</h2><p class="lead">I used AI to help organize questions about the case study and test early design ideas. I will verify factual claims against the creator's own materials and my direct gameplay observations.</p></div></div>
+  <div class="grid">
+    <article class="card span6"><div class="kicker">Research method</div><h3>What I need to verify</h3><ul><li>Creator identity and official game information.</li><li>The actual interaction rules and how the game responds to photographs.</li><li>Creator statements about the game's concept and intended message.</li><li>Credits for art, writing, music, and sound, where available.</li></ul><p class="small muted">Primary starting source: <a href="https://ncase.itch.io/wbwwb" target="_blank" rel="noopener">Official game page</a>.</p></article>
+    <article class="card span6"><div class="kicker">Two gaps to investigate</div><h3>What an AI summary could miss</h3><ol><li><strong>The player's felt experience:</strong> A summary may describe the mechanics but miss the timing, uncertainty, or emotional reaction I experienced while deciding what to photograph.</li><li><strong>The exact cause and effect:</strong> An AI may overstate how much control one photograph has over later events. I need to compare specific actions with what actually changes in the game.</li></ol></article>
+  </div>
+  <div class="card" style="margin-top:18px"><div class="kicker">Selected AI exchange / evidence required</div><h3>Question, response, and my challenge</h3>
+    <div class="todo"><strong>My prompt:</strong> “Analyze how the camera interaction in <em>We Become What We Behold</em> shapes the player's role. Separate what can be directly observed from what is an interpretation, and identify claims that need a source.”</div>
+    <div class="todo"><strong>AI response — insert a short exact excerpt:</strong> [Paste 1–3 sentences from the actual AI response you received.]</div>
+    <div class="todo"><strong>My follow-up challenge:</strong> “You describe the player's photographs as directly causing the later conflict. Which specific game events support that claim? Could the camera instead be revealing or amplifying behavior that is already present?”</div>
+    <div class="todo"><strong>My revised conclusion:</strong> [After checking the game and creator sources, explain which interpretation is better supported and why.]</div>
+  </div>
+  <div class="note" style="margin-top:16px"><strong>My design decision:</strong> I will borrow the case study's use of a simple action with narrative consequences, but I will use inspection rather than photography. The player will compare visible objects with their descriptions and discover that the room cannot provide one fully consistent version of the past.</div>
+</section>
+
+<section id="narrative">
+  <div class="sectionhead"><div class="num">04</div><div><div class="eyebrow">Narrative / concept</div><h2>What if a place remembered differently?</h2><p class="lead">For this project, hallucination means an experience in which perception becomes unreliable: what appears to be true does not always match the evidence around it.</p></div></div>
+  <div class="grid">
+    <article class="card span8"><div class="kicker">Story premise</div><h3>A familiar room with unfamiliar memories</h3><p>The player wakes in a quiet room and notices a photograph on the desk. It seems to show a memory of this place, but small details do not match what is currently visible. The player explores the room to understand why the objects seem to remember different versions of the same event.</p><p>As the player inspects more objects, the room becomes less stable. The mirror reflects an altered space, the clock suggests a different time, and the photograph changes. The player gradually realizes that the room is not a reliable record of the past.</p></article>
+    <article class="card span4"><div class="kicker">Player role</div><h3>The investigator</h3><p>The player is an observer trying to assemble a coherent memory from incomplete clues. They are not given a definitive narrator. Their task is to notice contradictions and decide what to believe.</p></article>
+  </div>
+  <div class="card" style="margin-top:18px"><div class="kicker">Intended emotional arc</div><div class="flow"><div><b>Arrive</b><span>Familiar and quiet</span></div><div><b>Wonder</b><span>Notice a mismatch</span></div><div><b>Doubt</b><span>Find contradictions</span></div><div><b>Discover</b><span>Question the memory</span></div><div><b>Leave</b><span>Accept uncertainty</span></div></div></div>
+  <p class="muted">The experience should feel curious first, then subtly unsettling. I want players to leave thinking about how memory and perception can shape the stories they tell themselves.</p>
+</section>
+
+<section id="journey">
+  <div class="sectionhead"><div class="num">05</div><div><div class="eyebrow">Interaction / player journey</div><h2>One action, three stages, a shifting reality.</h2><p class="lead">The main interaction is click-to-inspect. Each object responds with a visual change, a short text clue, or a contradiction that moves the player forward.</p></div></div>
+  <div class="card"><div class="kicker">Player journey flowchart</div>
+    <div class="flow"><div><b>Opening</b><span>Enter the room and read the first instruction</span></div><div><b>Stage 1</b><span>Inspect ordinary objects</span></div><div><b>Stage 2</b><span>Compare conflicting clues</span></div><div><b>Stage 3</b><span>Reveal the room's contradiction</span></div><div><b>Ending</b><span>Choose what memory to carry forward</span></div></div>
+    <p class="small muted">The player can inspect objects in any order within a stage. Finding the required clues unlocks the next stage.</p>
+  </div>
+  <h3 style="margin:26px 0 12px">Storyboard / key screens</h3>
+  <div class="story">
+    <article class="frame"><div class="frameNo">01 / OPENING</div><h3>The quiet room</h3><p>Goal: Understand the space. Input: Click “begin.” Feedback: A short instruction appears.</p></article>
+    <article class="frame"><div class="frameNo">02 / STAGE ONE</div><h3>Objects feel normal</h3><p>Goal: Explore. Input: Click the mirror, clock, or photograph. Feedback: Each object reveals a clue.</p></article>
+    <article class="frame"><div class="frameNo">03 / STAGE TWO</div><h3>Details disagree</h3><p>Goal: Compare clues. Input: Inspect objects again. Feedback: The room changes and descriptions conflict.</p></article>
+    <article class="frame"><div class="frameNo">04 / STAGE THREE + END</div><h3>The memory shifts</h3><p>Goal: Interpret the clues. Input: Select one of two memory fragments. Feedback: The ending reflects the player's choice but preserves uncertainty.</p></article>
+  </div>
+  <div class="note" style="margin-top:18px"><strong>Scope control:</strong> The prototype will use one room, a small number of clickable objects, short text, and simple state changes. This keeps the game achievable within the two-week build period.</div>
+</section>
+
+<section id="style">
+  <div class="sectionhead"><div class="num">06</div><div><div class="eyebrow">Art direction / sound guide</div><h2>Soft, dreamlike, and slightly wrong.</h2><p class="lead">The visual language begins calm and familiar, then introduces subtle distortions. The interface should remain simple so players focus on the room and its clues.</p></div></div>
+  <div class="grid">
+    <article class="card span6"><div class="kicker">Color direction</div><h3>Muted colors with selective contrast</h3><div class="palette"><div class="swatch" style="background:#29243f">Deep plum</div><div class="swatch" style="background:#7562a8">Violet</div><div class="swatch" style="background:#dcd3f2;color:#383047">Lavender</div><div class="swatch" style="background:#d99da9;color:#383047">Dusty rose</div><div class="swatch" style="background:#d9b875;color:#383047">Warm gold</div></div><p>Deep plum anchors the room. Lavender and dusty rose create a soft dreamlike atmosphere. Warm gold highlights clues that deserve attention. Color shifts will signal that something has changed.</p></article>
+    <article class="card span6"><div class="kicker">Typography + interface</div><h3>Quiet, readable, and minimal</h3><p><strong>Typography:</strong> A restrained serif for titles and a clean sans-serif for instructions and object descriptions.</p><p><strong>Interface:</strong> Small labels, clear hover states, and a simple clue panel. Clickable objects should be visually discoverable without adding distracting buttons everywhere.</p><p><strong>Motion:</strong> Slow fades, slight object movement, and brief image distortion. Motion should communicate a change in perception, not decorate every action.</p></article>
+    <article class="card span6"><div class="kicker">Visual reference 01</div><div class="ref"><div class="refmark"></div><div><h3>We Become What We Behold — Nicky Case</h3><p>Reference: <a href="https://ncase.itch.io/wbwwb" target="_blank" rel="noopener">Game page</a>.</p><p>What I am studying: Clear, minimal visual communication and how a simple framing mechanic supports the concept. I will not copy its characters or interface.</p></div></div></article>
+    <article class="card span6"><div class="kicker">Visual reference 02</div><div class="ref"><div class="refmark"></div><div><h3>Monument Valley — ustwo games</h3><p>Reference: <a href="https://www.monumentvalleygame.com/" target="_blank" rel="noopener">Official project website</a>.</p><p>What I am studying: Impossible architecture, controlled composition, and visual perspective. I will translate the principle into small changes in the room rather than recreate its art.</p></div></div></article>
+    <article class="card span12"><div class="kicker">Sound direction</div><h3>Sound should make the player notice absence as well as presence.</h3><p><strong>Ambient layer:</strong> A very quiet room tone, such as a soft low hum. <strong>Interaction feedback:</strong> A gentle click or muted chime when an object is inspected. <strong>Distortion cue:</strong> A brief reversed or softened tone when an object contradicts an earlier clue. <strong>Silence:</strong> Use a short pause before a major reveal to make the change feel intentional.</p><p>Audio will be optional, with a visible sound toggle. The game must remain understandable and playable with sound turned off. I plan to use original or properly licensed audio and credit every asset used.</p></article>
+  </div>
+  <p class="small muted">Reference credits: Nicky Case, <em>We Become What We Behold</em>; ustwo games, <em>Monument Valley</em>. These are research references, not assets copied into the project. Any image, sound, or other third-party asset used in the final game will be separately credited and checked for permission.</p>
+</section>
+
+<section id="plan">
+  <div class="sectionhead"><div class="num">07</div><div><div class="eyebrow">Production plan</div><h2>From proposal to playable experience.</h2><p class="lead">The build is intentionally small: one environment, one main interaction, three short stages, and a clear ending.</p></div></div>
+  <div class="grid">
+    <article class="card span6"><div class="kicker">Week 2 / Build the prototype</div><h3>Create the playable core</h3><ul><li>Set up the HTML, CSS, and JavaScript structure.</li><li>Build the room layout and clickable objects.</li><li>Implement click-to-inspect interactions and clue text.</li><li>Create the opening and three short stages.</li><li>Add basic transitions and an ending state.</li><li>Make the layout usable on desktop and mobile-sized screens.</li></ul><p><strong>Deliverable:</strong> A playable prototype that demonstrates the complete beginning-to-ending journey.</p></article>
+    <article class="card span6"><div class="kicker">Week 3 / Test, refine, publish</div><h3>Improve clarity and atmosphere</h3><ul><li>Ask several people to play without explaining the story first.</li><li>Observe whether they understand what can be clicked and what to do next.</li><li>Record confusion, missed clues, and pacing issues.</li><li>Adjust instructions, contrast, timing, and object feedback.</li><li>Test sound controls and confirm the game works without audio.</li><li>Fix bugs and publish the final game on the portfolio website.</li></ul><p><strong>Deliverable:</strong> A tested, refined, published browser game with a working URL.</p></article>
+    <article class="card span12"><div class="kicker">How success will be evaluated</div><h3>What I want players to experience</h3><p>Players should understand the main interaction quickly, discover at least one meaningful contradiction in each stage, and reach an ending that makes them reconsider what they saw. The game should be short, accessible, visually consistent, and understandable without sound.</p></article>
+  </div>
+</section>
+
+<section id="closing">
+  <div class="sectionhead"><div class="num">✦</div><div><div class="eyebrow">Closing statement</div><h2>Can you trust what the room remembers?</h2><p class="lead">The Room That Remembers turns the act of looking into the central mechanic. By exploring a space that changes its story, players experience how uncertain perception can become—and how meaning is built from the details we choose to believe.</p></div></div>
+  <div class="warning"><strong>Before submitting:</strong> Replace every bracketed research placeholder in Section 02 and Section 03 with your own gameplay notes, exact examples, and a real AI exchange. Add screenshots you captured during your playthrough. Check every source link and test the published page.</div>
+</section>
+</main>
+<footer><div class="wrap"><div class="eyebrow" style="color:#d9b875">Lana Harkin · AI for Interdisciplinary Design</div><h2 style="color:white;margin-top:10px">The Room That Remembers</h2><p>A Week 1 game proposal for the three-week Hallucination web game project.</p><p class="small">Research references: Nicky Case, <a href="https://ncase.itch.io/wbwwb">We Become What We Behold</a>; ustwo games, <a href="https://www.monumentvalleygame.com/">Monument Valley</a>. All third-party materials remain credited to their creators.</p></div></footer>
+</body>
+</html>
